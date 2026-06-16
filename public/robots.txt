@@ -1,0 +1,5 @@
+# https://www.robotstxt.org/robotstxt.html
+# Chấm Điểm Tiến Lên
+
+User-agent: *
+Disallow:

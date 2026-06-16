@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Primary Meta Tags -->
+  <title>Chấm Điểm Tiến Lên - Bảng tính điểm đánh bài 4 người</title>
+  <meta name="title" content="Chấm Điểm Tiến Lên - Bảng tính điểm đánh bài 4 người">
+  <meta name="description"
+    content="Web chấm điểm đánh bài Tiến Lên cho 4 người chơi. Tính điểm theo thứ hạng mỗi ván (Nhất +3, Nhì +2, Ba +1, Bét 0), cộng điểm thưởng, theo dõi điểm tích lũy và xác định người thắng chung cuộc. Hoạt động offline.">
+  <meta name="keywords"
+    content="chấm điểm tiến lên, tính điểm đánh bài, bảng điểm tiến lên, tien len, đánh bài tiến lên, ghi điểm bài">
+  <meta name="theme-color" content="#2E3041" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Chấm Điểm Tiến Lên - Bảng tính điểm đánh bài 4 người">
+  <meta property="og:description"
+    content="Web chấm điểm đánh bài Tiến Lên cho 4 người chơi. Tính điểm theo thứ hạng mỗi ván, cộng điểm thưởng, theo dõi điểm tích lũy và xác định người thắng chung cuộc.">
+  <meta property="og:site_name" content="Chấm Điểm Tiến Lên">
+  <meta property="og:locale" content="vi_VN">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary">
+  <meta property="twitter:title" content="Chấm Điểm Tiến Lên">
+  <meta property="twitter:description"
+    content="Web chấm điểm đánh bài Tiến Lên cho 4 người chơi. Tính điểm theo thứ hạng mỗi ván.">
+
+  <!-- Additional Meta Tags -->
+  <meta name="application-name" content="Chấm Điểm Tiến Lên">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Chấm Điểm Tiến Lên">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- Icons and Manifest -->
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/logo192.png" />
+  <link rel="manifest" href="/manifest.json" />
+
+  <!-- Performance & Resource Hints -->
+  <link rel="preload" href="/logo512.png" as="image" type="image/png">
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Chấm Điểm Tiến Lên",
+    "url": "https://life-trinket.web.app/",
+    "description": "Web chấm điểm đánh bài Tiến Lên cho 4 người chơi. Tính điểm theo thứ hạng mỗi ván, cộng điểm thưởng, theo dõi điểm tích lũy và xác định người thắng chung cuộc. Hoạt động offline.",
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "Any (Web-based PWA)",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Chấm điểm Tiến Lên cho 4 người chơi",
+      "Tính điểm theo thứ hạng mỗi ván (Nhất +3, Nhì +2, Ba +1, Bét 0)",
+      "Cộng điểm thưởng thủ công (chặt heo, đốt, cháy)",
+      "Theo dõi điểm tích lũy",
+      "Xác định người thắng chung cuộc theo điểm tối đa",
+      "Hoạt động offline",
+      "Progressive Web App (PWA)"
+    ],
+    "browserRequirements": "Requires JavaScript. Works on Chrome, Safari, Firefox, Edge.",
+    "genre": ["Utility", "Card Game"],
+    "keywords": "chấm điểm tiến lên, tính điểm đánh bài, bảng điểm tiến lên, tien len"
+  }
+  </script>
+
+  <!-- FAQ Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Điểm mỗi ván được tính thế nào?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Theo thứ hạng mỗi ván: Nhất +3, Nhì +2, Ba +1, Bét 0. Có thể cộng thêm điểm thưởng thủ công cho các trường hợp như chặt heo, đốt, cháy."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Khi nào trận đấu kết thúc?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Khi một người chơi đạt mốc điểm tối đa đã đặt trước, hoặc khi bấm nút Kết thúc trận thủ công. Người có tổng điểm cao nhất là người thắng chung cuộc."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Ứng dụng có hoạt động offline không?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Có, sau lần truy cập đầu và cài đặt dưới dạng PWA, ứng dụng hoạt động hoàn toàn offline. Dữ liệu được lưu cục bộ trên thiết bị của bạn."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>
