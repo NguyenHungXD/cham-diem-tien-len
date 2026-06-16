@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 
 .env
+
+# Build artifacts from tsc
+*.tsbuildinfo
+vite.config.d.ts
+vite.config.js
