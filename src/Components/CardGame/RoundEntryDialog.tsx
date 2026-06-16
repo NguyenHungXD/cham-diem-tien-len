@@ -30,6 +30,8 @@ export const RoundEntryDialog = ({ onClose }: { onClose: () => void }) => {
 
   const [ranks, setRanks] = useState<Record<number, number | null>>(emptyRanks);
   const [bonus, setBonus] = useState<Record<number, number>>(emptyBonus);
+  // Chuỗi nháp cho ô nhập, để cho phép gõ "-" hoặc rỗng tạm thời
+  const [bonusText, setBonusText] = useState<Record<number, string>>({});
 
   const assignedCount = state.players.filter(
     (p) => ranks[p.index] !== null && ranks[p.index] !== undefined
@@ -84,14 +86,29 @@ export const RoundEntryDialog = ({ onClose }: { onClose: () => void }) => {
   };
 
   const adjustBonus = (playerIndex: number, delta: number) => {
-    setBonus((prev) => ({
-      ...prev,
-      [playerIndex]: (prev[playerIndex] || 0) + delta,
-    }));
+    setBonus((prev) => {
+      const value = (prev[playerIndex] || 0) + delta;
+      setBonusText((t) => ({ ...t, [playerIndex]: String(value) }));
+      return { ...prev, [playerIndex]: value };
+    });
   };
 
-  const setBonusValue = (playerIndex: number, value: number) => {
-    setBonus((prev) => ({ ...prev, [playerIndex]: value }));
+  const onBonusTextChange = (playerIndex: number, raw: string) => {
+    setBonusText((t) => ({ ...t, [playerIndex]: raw }));
+    // Cho phép trạng thái nháp "", "-" mà chưa cập nhật số
+    if (raw === '' || raw === '-') {
+      setBonus((prev) => ({ ...prev, [playerIndex]: 0 }));
+      return;
+    }
+    const parsed = Math.trunc(Number(raw));
+    if (!Number.isNaN(parsed)) {
+      setBonus((prev) => ({ ...prev, [playerIndex]: parsed }));
+    }
+  };
+
+  const onBonusBlur = (playerIndex: number) => {
+    // Chuẩn hóa hiển thị về số thực tế
+    setBonusText((t) => ({ ...t, [playerIndex]: String(bonus[playerIndex] || 0) }));
   };
 
   const previewScore = (playerIndex: number) => {
@@ -195,12 +212,17 @@ export const RoundEntryDialog = ({ onClose }: { onClose: () => void }) => {
                       −
                     </button>
                     <input
-                      type="number"
+                      type="text"
                       inputMode="numeric"
-                      value={bonus[player.index] || 0}
-                      onChange={(e) =>
-                        setBonusValue(player.index, Math.trunc(Number(e.target.value) || 0))
+                      pattern="-?[0-9]*"
+                      value={
+                        bonusText[player.index] ??
+                        String(bonus[player.index] || 0)
                       }
+                      onChange={(e) =>
+                        onBonusTextChange(player.index, e.target.value)
+                      }
+                      onBlur={() => onBonusBlur(player.index)}
                       onFocus={(e) => e.target.select()}
                       className="w-16 text-center font-bold tabular-nums bg-white/8 rounded-lg py-1 outline-none border-none text-text-primary"
                     />
