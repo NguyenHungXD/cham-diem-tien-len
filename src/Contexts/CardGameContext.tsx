@@ -11,6 +11,8 @@ export type CardGameContextType = {
   deleteRound: (roundId: string) => void;
   setMaxScore: (maxScore: number) => void;
   setPlayerName: (index: number, name: string) => void;
+  setPlayerEmoji: (index: number, emoji: string) => void;
+  setPlayerColor: (index: number, color: string) => void;
   finishMatch: () => void;
   resetMatch: () => void;
 };

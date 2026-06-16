@@ -1,53 +1,74 @@
 import { twc } from 'react-twc';
 import { useCardGame } from '../../Hooks/useCardGame';
 
-const Wrapper = twc.div`flex flex-col w-full mt-2`;
+const Wrapper = twc.div`flex flex-col w-full mt-2 glass rounded-2xl p-3`;
 
-const Title = twc.div`text-sm text-text-secondary mb-1`;
-
-const HeaderRow = twc.div`flex flex-row items-center gap-2 text-xs text-text-secondary px-2`;
-
-const RoundRow = twc.div`flex flex-row items-center gap-2 px-2 py-1 border-b border-white/5`;
-
-const Cell = twc.div`flex-1 text-center text-text-primary tabular-nums`;
-
-const DeleteButton = twc.button`text-red-400 hover:text-red-300 text-sm px-1 shrink-0`;
+const Title = twc.div`text-xs font-bold uppercase tracking-wider text-text-secondary mb-2 px-1`;
 
 export const HistoryList = () => {
   const { state, deleteRound } = useCardGame();
 
   if (state.rounds.length === 0) {
-    return null;
+    return (
+      <Wrapper>
+        <Title>Lịch sử các ván</Title>
+        <p className="text-sm text-text-secondary text-center py-3">
+          Chưa có ván nào. Bấm "Nhập ván mới" để bắt đầu.
+        </p>
+      </Wrapper>
+    );
   }
 
   return (
     <Wrapper>
       <Title>Lịch sử các ván ({state.rounds.length})</Title>
 
-      <HeaderRow>
-        <span className="w-8 text-left">Ván</span>
+      <div className="flex flex-row items-center gap-2 px-1 pb-1.5">
+        <span className="w-7 text-xs text-text-secondary shrink-0">Ván</span>
         {state.players.map((p) => (
-          <span key={p.index} className="flex-1 text-center truncate">
-            {p.name}
+          <span
+            key={p.index}
+            className="flex-1 flex items-center justify-center text-base"
+            title={p.name}
+          >
+            {p.emoji}
           </span>
         ))}
-        <span className="w-6" />
-      </HeaderRow>
+        <span className="w-6 shrink-0" />
+      </div>
 
-      {state.rounds.map((round, i) => (
-        <RoundRow key={round.id}>
-          <span className="w-8 text-left text-text-secondary">{i + 1}</span>
-          {state.players.map((p) => (
-            <Cell key={p.index}>{round.scores[p.index] ?? 0}</Cell>
-          ))}
-          <DeleteButton
-            onClick={() => deleteRound(round.id)}
-            aria-label={`Xóa ván ${i + 1}`}
+      <div className="flex flex-col">
+        {state.rounds.map((round, i) => (
+          <div
+            key={round.id}
+            className="flex flex-row items-center gap-2 px-1 py-1.5 border-t border-white/5"
           >
-            ✕
-          </DeleteButton>
-        </RoundRow>
-      ))}
+            <span className="w-7 text-sm font-semibold text-text-secondary shrink-0">
+              {i + 1}
+            </span>
+            {state.players.map((p) => {
+              const v = round.scores[p.index] ?? 0;
+              return (
+                <span
+                  key={p.index}
+                  className="flex-1 text-center font-semibold tabular-nums"
+                  style={{ color: v < 0 ? 'var(--color-danger)' : undefined }}
+                >
+                  {v > 0 ? '+' : ''}
+                  {v}
+                </span>
+              );
+            })}
+            <button
+              onClick={() => deleteRound(round.id)}
+              className="w-6 h-6 flex items-center justify-center rounded-lg text-danger active:bg-white/10 shrink-0"
+              aria-label={`Xóa ván ${i + 1}`}
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+      </div>
     </Wrapper>
   );
 };

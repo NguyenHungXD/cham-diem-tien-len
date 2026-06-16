@@ -1,14 +1,38 @@
 import { z } from 'zod';
 
 export const presetColors = [
-  '#D08182', // Muted Pink
-  '#5AAB9E', // Teal
-  '#D58B5A', // Burnt Orange
-  '#697A9A', // Soft Indigo
-  '#78B2D3', // Pastel Blue
-  '#A785BA', // Lilac
-  '#D9C17C', // Muted Yellow
-  '#FF907F', // Light Coral
+  '#F0648C', // Hồng
+  '#3FBFA8', // Ngọc
+  '#F2994A', // Cam
+  '#6C7BD6', // Tím xanh
+  '#56A8E8', // Xanh dương
+  '#B07BD6', // Tử đinh hương
+  '#E0C04A', // Vàng
+  '#FF7B6B', // San hô
+];
+
+// Bảng emoji để chọn làm avatar cho mỗi người chơi
+export const presetEmojis = [
+  '🐱',
+  '🐶',
+  '🦊',
+  '🐼',
+  '🐯',
+  '🦁',
+  '🐸',
+  '🐵',
+  '🐧',
+  '🦄',
+  '🐲',
+  '🦖',
+  '👑',
+  '🤖',
+  '👻',
+  '🎩',
+  '🌟',
+  '🔥',
+  '⚡',
+  '🍀',
 ];
 
 export const NUMBER_OF_PLAYERS = 4;
@@ -22,6 +46,7 @@ export type CardPlayer = {
   index: number;
   name: string;
   color: string;
+  emoji: string;
 };
 
 export type RoundEntry = {
@@ -42,6 +67,7 @@ export const cardPlayerSchema = z.object({
   index: z.number(),
   name: z.string(),
   color: z.string(),
+  emoji: z.string().default('🐱'),
 });
 
 export const roundEntrySchema = z.object({
@@ -64,6 +90,7 @@ export const createDefaultCardGameState = (): CardGameState => {
       index: i,
       name: `Người chơi ${i + 1}`,
       color: presetColors[i % presetColors.length],
+      emoji: presetEmojis[i % presetEmojis.length],
     })
   );
 

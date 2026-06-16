@@ -113,6 +113,24 @@ export const CardGameProvider = ({ children }: { children: ReactNode }) => {
       });
     };
 
+    const setPlayerEmoji = (index: number, emoji: string) => {
+      setStateAndLocalStorage({
+        ...state,
+        players: state.players.map((p) =>
+          p.index === index ? { ...p, emoji } : p
+        ),
+      });
+    };
+
+    const setPlayerColor = (index: number, color: string) => {
+      setStateAndLocalStorage({
+        ...state,
+        players: state.players.map((p) =>
+          p.index === index ? { ...p, color } : p
+        ),
+      });
+    };
+
     const finishMatch = () => {
       setStateAndLocalStorage({ ...state, finished: true });
     };
@@ -137,6 +155,8 @@ export const CardGameProvider = ({ children }: { children: ReactNode }) => {
       deleteRound,
       setMaxScore,
       setPlayerName,
+      setPlayerEmoji,
+      setPlayerColor,
       finishMatch,
       resetMatch,
     };
