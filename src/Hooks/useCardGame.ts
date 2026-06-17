@@ -1,7 +1,7 @@
 import { useContext } from 'react';
-import { CardGameContext } from '../Contexts/CardGameContext';
+import { CardGameContext, CardGameContextType } from '../Contexts/CardGameContext';
 
-export const useCardGame = () => {
+export const useCardGame = (): CardGameContextType => {
   const context = useContext(CardGameContext);
 
   if (!context) {

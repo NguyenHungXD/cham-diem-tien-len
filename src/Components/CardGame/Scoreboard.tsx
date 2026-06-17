@@ -117,7 +117,7 @@ const PlayerCard = ({
 };
 
 export const Scoreboard = () => {
-  const { state, totals, leaderIndex, finishMatch, shareLink } = useCardGame();
+  const { state, totals, leaderIndex, finishMatch, roomId, pushRoomState, copyRoomLink } = useCardGame();
   const [roundOpen, setRoundOpen] = useState(false);
 
   const ranked = [...state.players].sort((a, b) => totals[b.index] - totals[a.index]);
@@ -127,13 +127,16 @@ export const Scoreboard = () => {
       <Header>
         <Title>Bảng điểm</Title>
         <div className="flex items-center gap-2">
-          <button
-            onClick={shareLink}
-            className="flex items-center gap-1 text-xxs font-semibold px-2 py-1 rounded-lg bg-white/8 text-text-secondary active:bg-white/15 duration-150"
-            title="Chia sẻ điểm hiện tại"
-          >
-            🔗 Chia sẻ
-          </button>
+          {roomId ? (
+            <div className="flex items-center gap-1">
+              <button onClick={pushRoomState} className="flex items-center gap-1 text-xxs font-semibold px-2 py-1 rounded-lg bg-white/8 text-text-secondary active:bg-white/15 duration-150" title="Đồng bộ lên server">
+                📡 Sync
+              </button>
+              <button onClick={copyRoomLink} className="flex items-center gap-1 text-xxs font-semibold px-2 py-1 rounded-lg bg-white/8 text-text-secondary active:bg-white/15 duration-150" title="Copy link phòng">
+                🔗 {roomId}
+              </button>
+            </div>
+          ) : null}
           {state.mode === 'rounds' ? (
             <GoalBadge>
               Ván {state.rounds.length}/{state.totalRounds}

@@ -1,6 +1,8 @@
 import { createContext } from 'react';
 import { CardGameState } from '../Types/CardGame';
 
+export type RoomStatus = 'none' | 'creating' | 'idle' | 'synced' | 'error';
+
 export type CardGameContextType = {
   state: CardGameState;
   totals: Record<number, number>;
@@ -17,8 +19,14 @@ export type CardGameContextType = {
   setTotalRounds: (totalRounds: number) => void;
   finishMatch: () => void;
   resetMatch: () => void;
-  // Chia sẻ game state qua URL
-  shareLink: () => void;
+  // Room
+  roomId: string | null;
+  roomStatus: RoomStatus;
+  createRoom: () => Promise<void>;
+  joinRoom: (roomId: string) => Promise<void>;
+  pushRoomState: () => Promise<void>;
+  copyRoomLink: () => void;
+  leaveRoom: () => void;
 };
 
 export const CardGameContext = createContext<CardGameContextType | null>(null);
