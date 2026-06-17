@@ -6,7 +6,6 @@ import { CardGameState } from '../Types/CardGame';
 export const useSupabaseRoom = (
   state: CardGameState,
   onRemoteState: (state: CardGameState) => void,
-  onCreated?: () => void,
 ) => {
   const [roomId, setRoomId] = useState<string | null>(null);
   const [roomStatus, setRoomStatus] = useState<RoomStatus>('none');
@@ -27,11 +26,10 @@ export const useSupabaseRoom = (
       await updateRoomState(rid, state);
       setRemoteVersion(v => v + 1);
       setRoomStatus('synced');
-      onCreated?.();
     } catch {
       setRoomStatus('error');
     }
-  }, [state.players, state.mode, state.maxScore, state.totalRounds, onCreated]);
+  }, [state.players, state.mode, state.maxScore, state.totalRounds]);
 
   // Join phòng (load state từ server)
   const join = useCallback(async (rid: string) => {
