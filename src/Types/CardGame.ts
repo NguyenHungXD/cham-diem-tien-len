@@ -42,6 +42,11 @@ export const RANK_POINTS = [3, 2, 1, 0];
 
 export const DEFAULT_MAX_SCORE = 50;
 
+export const DEFAULT_TOTAL_ROUNDS = 10;
+
+// Chế độ chơi: theo điểm về đích, hoặc theo số ván cố định
+export type GameMode = 'score' | 'rounds';
+
 export type CardPlayer = {
   index: number;
   name: string;
@@ -58,7 +63,9 @@ export type RoundEntry = {
 export type CardGameState = {
   players: CardPlayer[];
   rounds: RoundEntry[];
+  mode: GameMode;
   maxScore: number;
+  totalRounds: number;
   started: boolean;
   finished: boolean;
 };
@@ -78,7 +85,9 @@ export const roundEntrySchema = z.object({
 export const cardGameStateSchema = z.object({
   players: z.array(cardPlayerSchema),
   rounds: z.array(roundEntrySchema),
+  mode: z.enum(['score', 'rounds']).default('score'),
   maxScore: z.number().min(1).max(9999),
+  totalRounds: z.number().min(1).max(999).default(10),
   started: z.boolean(),
   finished: z.boolean(),
 });
@@ -97,7 +106,9 @@ export const createDefaultCardGameState = (): CardGameState => {
   return {
     players,
     rounds: [],
+    mode: 'score',
     maxScore: DEFAULT_MAX_SCORE,
+    totalRounds: DEFAULT_TOTAL_ROUNDS,
     started: false,
     finished: false,
   };

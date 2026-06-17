@@ -13,6 +13,8 @@ export type CardGameContextType = {
   setPlayerName: (index: number, name: string) => void;
   setPlayerEmoji: (index: number, emoji: string) => void;
   setPlayerColor: (index: number, color: string) => void;
+  setGameMode: (mode: 'score' | 'rounds') => void;
+  setTotalRounds: (totalRounds: number) => void;
   finishMatch: () => void;
   resetMatch: () => void;
 };

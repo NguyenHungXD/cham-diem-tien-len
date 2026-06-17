@@ -24,8 +24,16 @@ const Sheet = twc.div`w-full sm:max-w-sm bg-[#161827] rounded-t-3xl sm:rounded-3
 type Editing = { index: number } | null;
 
 export const SetupScreen = () => {
-  const { state, setPlayerName, setPlayerEmoji, setPlayerColor, setMaxScore, startMatch } =
-    useCardGame();
+  const {
+    state,
+    setPlayerName,
+    setPlayerEmoji,
+    setPlayerColor,
+    setMaxScore,
+    setGameMode,
+    setTotalRounds,
+    startMatch,
+  } = useCardGame();
   const [editing, setEditing] = useState<Editing>(null);
 
   const editingPlayer =
@@ -77,34 +85,86 @@ export const SetupScreen = () => {
       </Card>
 
       <Card>
-        <SectionLabel>Điểm về đích</SectionLabel>
-        <div className="flex flex-row items-center gap-3">
-          <input
-            type="range"
-            min={10}
-            max={200}
-            step={5}
-            value={Math.min(200, state.maxScore)}
-            onChange={(e) => setMaxScore(Number(e.target.value))}
-            className="flex-1"
-          />
-          <div className="flex items-center gap-1 shrink-0">
-            <input
-              type="number"
-              min={1}
-              max={9999}
-              value={state.maxScore}
-              onChange={(e) =>
-                setMaxScore(Math.max(1, Math.min(9999, Number(e.target.value) || 1)))
-              }
-              className="w-20 bg-white/8 text-text-primary rounded-xl px-3 py-2 outline-none border-none text-center font-bold text-lg"
-            />
-          </div>
+        <SectionLabel>Chế độ chơi</SectionLabel>
+        <div className="flex flex-row gap-2">
+          <button
+            onClick={() => setGameMode('score')}
+            className={`flex-1 px-3 py-2 rounded-xl font-semibold text-sm duration-150 ${state.mode === 'score' ? 'bg-primary-main text-white' : 'bg-white/8 text-text-secondary'}`}
+          >
+            Về đích theo điểm
+          </button>
+          <button
+            onClick={() => setGameMode('rounds')}
+            className={`flex-1 px-3 py-2 rounded-xl font-semibold text-sm duration-150 ${state.mode === 'rounds' ? 'bg-primary-main text-white' : 'bg-white/8 text-text-secondary'}`}
+          >
+            Chơi đủ số ván
+          </button>
         </div>
-        <p className="text-xs text-text-secondary px-1">
-          Ai chạm mốc này trước sẽ kết thúc trận.
-        </p>
       </Card>
+
+      {state.mode === 'score' && (
+        <Card>
+          <SectionLabel>Điểm về đích</SectionLabel>
+          <div className="flex flex-row items-center gap-3">
+            <input
+              type="range"
+              min={10}
+              max={200}
+              step={5}
+              value={Math.min(200, state.maxScore)}
+              onChange={(e) => setMaxScore(Number(e.target.value))}
+              className="flex-1"
+            />
+            <div className="flex items-center gap-1 shrink-0">
+              <input
+                type="number"
+                min={1}
+                max={9999}
+                value={state.maxScore}
+                onChange={(e) =>
+                  setMaxScore(Math.max(1, Math.min(9999, Number(e.target.value) || 1)))
+                }
+                className="w-20 bg-white/8 text-text-primary rounded-xl px-3 py-2 outline-none border-none text-center font-bold text-lg"
+              />
+            </div>
+          </div>
+          <p className="text-xs text-text-secondary px-1">
+            Ai chạm mốc này trước sẽ kết thúc trận.
+          </p>
+        </Card>
+      )}
+
+      {state.mode === 'rounds' && (
+        <Card>
+          <SectionLabel>Số ván chơi</SectionLabel>
+          <div className="flex flex-row items-center gap-3">
+            <input
+              type="range"
+              min={1}
+              max={30}
+              step={1}
+              value={state.totalRounds}
+              onChange={(e) => setTotalRounds(Number(e.target.value))}
+              className="flex-1"
+            />
+            <div className="flex items-center gap-1 shrink-0">
+              <input
+                type="number"
+                min={1}
+                max={99}
+                value={state.totalRounds}
+                onChange={(e) =>
+                  setTotalRounds(Math.max(1, Math.min(99, Number(e.target.value) || 1)))
+                }
+                className="w-20 bg-white/8 text-text-primary rounded-xl px-3 py-2 outline-none border-none text-center font-bold text-lg"
+              />
+            </div>
+          </div>
+          <p className="text-xs text-text-secondary px-1">
+            Chơi đủ số ván rồi tổng hợp điểm.
+          </p>
+        </Card>
+      )}
 
       <StartButton onClick={startMatch}>Bắt đầu chơi 🎮</StartButton>
 

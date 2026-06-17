@@ -111,6 +111,14 @@ export const MatchOver = () => {
             <span className="text-text-secondary">Tổng số ván</span>
             <span className="font-bold">{state.rounds.length}</span>
           </div>
+          {state.mode === 'rounds' && (
+            <div className="flex items-center justify-between rounded-xl bg-white/5 px-3 py-2">
+              <span className="text-text-secondary">Số ván đã chơi</span>
+              <span className="font-bold">
+                {state.rounds.length} / {state.totalRounds}
+              </span>
+            </div>
+          )}
           <div className="flex items-center justify-between rounded-xl bg-white/5 px-3 py-2">
             <span className="text-text-secondary">Về Nhất nhiều nhất</span>
             <span className="font-bold">

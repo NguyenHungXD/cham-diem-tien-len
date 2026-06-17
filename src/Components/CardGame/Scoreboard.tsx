@@ -126,7 +126,13 @@ export const Scoreboard = () => {
     <Wrapper>
       <Header>
         <Title>Bảng điểm</Title>
-        <GoalBadge>🎯 Về đích: {state.maxScore}</GoalBadge>
+        {state.mode === 'rounds' ? (
+          <GoalBadge>
+            Ván {state.rounds.length}/{state.totalRounds}
+          </GoalBadge>
+        ) : (
+          <GoalBadge>🎯 Về đích: {state.maxScore}</GoalBadge>
+        )}
       </Header>
 
       <div className="flex flex-col gap-3 w-full">

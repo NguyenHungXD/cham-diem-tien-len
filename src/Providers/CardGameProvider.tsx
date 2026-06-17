@@ -41,12 +41,17 @@ export const CardGameProvider = ({ children }: { children: ReactNode }) => {
     }
 
     // Tính lại trạng thái kết thúc từ một danh sách ván bất kỳ
-    const computeFinished = (rounds: typeof state.rounds) =>
-      state.players.some(
+    const computeFinished = (rounds: typeof state.rounds) => {
+      if (state.mode === 'rounds') {
+        return rounds.length >= state.totalRounds;
+      }
+      // mode 'score'
+      return state.players.some(
         (p) =>
           rounds.reduce((sum, r) => sum + (r.scores[p.index] ?? 0), 0) >=
           state.maxScore
       );
+    };
 
     let leaderIndex: number | null = null;
     if (state.rounds.length > 0) {
@@ -132,17 +137,27 @@ export const CardGameProvider = ({ children }: { children: ReactNode }) => {
       });
     };
 
+    const setGameMode = (mode: 'score' | 'rounds') => {
+      setStateAndLocalStorage({ ...state, mode });
+    };
+
+    const setTotalRounds = (totalRounds: number) => {
+      setStateAndLocalStorage({ ...state, totalRounds });
+    };
+
     const finishMatch = () => {
       setStateAndLocalStorage({ ...state, finished: true });
     };
 
     const resetMatch = () => {
       const fresh = createDefaultCardGameState();
-      // Giữ lại tên người chơi và điểm tối đa
+      // Giữ lại tên người chơi và điểm tối đa / số ván
       setStateAndLocalStorage({
         ...fresh,
         players: state.players,
         maxScore: state.maxScore,
+        totalRounds: state.totalRounds,
+        mode: state.mode,
       });
     };
 
@@ -158,6 +173,8 @@ export const CardGameProvider = ({ children }: { children: ReactNode }) => {
       setPlayerName,
       setPlayerEmoji,
       setPlayerColor,
+      setGameMode,
+      setTotalRounds,
       finishMatch,
       resetMatch,
     };
