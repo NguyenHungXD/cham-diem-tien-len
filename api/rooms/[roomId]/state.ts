@@ -1,5 +1,5 @@
 ﻿export const config = {
-  runtime: 'nodejs20.x',
+  runtime: "nodejs",
 };
 
 // PUT /api/rooms/:roomId/state

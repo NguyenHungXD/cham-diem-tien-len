@@ -1,5 +1,5 @@
 ﻿export const config = {
-  runtime: 'nodejs20.x',
+  runtime: "nodejs",
 };
 
 // POST /api/rooms/:roomId/join
