@@ -15,7 +15,7 @@ export default async (req: Request) => {
     const parts = url.pathname.split('/');
     const roomId = parts[parts.length - 1];
 
-    const raw = await kv.get(`room:${roomId}`);
+    const raw: string | null = await kv.get<string>(`room:${roomId}`);
     if (!raw) {
       return new Response(JSON.stringify({ error: 'Room not found or expired', expired: true }), { status: 404 });
     }
@@ -28,3 +28,4 @@ export default async (req: Request) => {
     return new Response(JSON.stringify({ error: 'Internal error' }), { status: 500 });
   }
 };
+
