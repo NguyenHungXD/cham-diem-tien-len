@@ -42,10 +42,16 @@ export const HistoryList = () => {
         {state.players.map((p) => (
           <span
             key={p.index}
-            className="flex-1 flex items-center justify-center text-base"
+            className="flex-1 flex flex-col items-center justify-center min-w-0"
             title={p.name}
           >
-            {p.emoji}
+            <span className="text-base leading-none">{p.emoji}</span>
+            <span
+              className="text-[10px] leading-tight font-semibold truncate max-w-full mt-0.5"
+              style={{ color: p.color }}
+            >
+              {p.name}
+            </span>
           </span>
         ))}
       </div>
