@@ -1,22 +1,9 @@
 import { customAlphabet } from 'nanoid';
-import { kv } from '@vercel/kv';
+import { supabase } from '../lib/supabase';
 
 export const config = {
   runtime: "nodejs",
 };
-
-interface RoomData {
-  id: string;
-  createdAt: number;
-  version: number;
-  players: { index: number; name: string; color: string; emoji: string; token: string }[];
-  rounds: { id: string; scores: Record<number, number> }[];
-  mode: string;
-  maxScore: number;
-  totalRounds: number;
-  started: boolean;
-  finished: boolean;
-}
 
 // POST /api/rooms
 export default async (req: Request) => {
@@ -35,9 +22,8 @@ export default async (req: Request) => {
     const roomId = nanoid6();
     const playerToken = 'tok_' + customAlphabet('0123456789abcdef', 16)();
 
-    const roomData: RoomData = {
+    const roomData = {
       id: roomId,
-      createdAt: Date.now(),
       version: 1,
       players: [{ index: 0, name: playerName, color: playerColor, emoji: playerEmoji, token: playerToken }],
       rounds: [],
@@ -48,7 +34,14 @@ export default async (req: Request) => {
       finished: false,
     };
 
-    await kv.set(`room:${roomId}`, JSON.stringify(roomData), { ex: 43200 });
+    const { error } = await supabase
+      .from('rooms')
+      .insert({ id: roomId, data: roomData });
+
+    if (error) {
+      console.error('supabase insert error:', error);
+      return new Response(JSON.stringify({ error: 'Database error' }), { status: 500 });
+    }
 
     return new Response(JSON.stringify({ roomId, playerToken }), {
       status: 200,

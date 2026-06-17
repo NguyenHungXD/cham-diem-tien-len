@@ -1,4 +1,4 @@
-﻿import { kv } from '@vercel/kv';
+﻿import { supabase } from '../../lib/supabase';
 
 export const config = {
   runtime: "nodejs",
@@ -15,12 +15,17 @@ export default async (req: Request) => {
     const parts = url.pathname.split('/');
     const roomId = parts[parts.length - 1];
 
-    const raw: string | null = await kv.get<string>(`room:${roomId}`);
-    if (!raw) {
+    const { data: row, error: fetchError } = await supabase
+      .from('rooms')
+      .select('data')
+      .eq('id', roomId)
+      .single();
+
+    if (fetchError || !row) {
       return new Response(JSON.stringify({ error: 'Room not found or expired', expired: true }), { status: 404 });
     }
 
-    return new Response(raw, {
+    return new Response(JSON.stringify(row.data), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -28,4 +33,3 @@ export default async (req: Request) => {
     return new Response(JSON.stringify({ error: 'Internal error' }), { status: 500 });
   }
 };
-
