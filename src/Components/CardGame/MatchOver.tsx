@@ -1,4 +1,5 @@
 import { useCardGame } from '../../Hooks/useCardGame';
+import { Confetti } from './Confetti';
 
 const MEDALS = ['🥇', '🥈', '🥉', ''];
 
@@ -10,13 +11,42 @@ export const MatchOver = () => {
   );
   const winner = ranked[0];
 
+  // Thống kê: số ván về Nhất, ván điểm cao nhất của mỗi người
+  const firstWins: Record<number, number> = {};
+  const bestRound: Record<number, number> = {};
+  for (const p of state.players) {
+    firstWins[p.index] = 0;
+    bestRound[p.index] = 0;
+  }
+  for (const round of state.rounds) {
+    // Người về Nhất trong ván = người có điểm cơ bản cao nhất theo RANK_POINTS[0]
+    // Suy ra từ điểm: ai có score cao nhất ván đó (xấp xỉ), nhưng chính xác hơn:
+    // điểm hạng Nhất là RANK_POINTS[0]. Ta đếm người có điểm ván >= điểm người khác.
+    let topIdx = state.players[0].index;
+    let topVal = -Infinity;
+    for (const p of state.players) {
+      const v = round.scores[p.index] ?? 0;
+      if (v > topVal) {
+        topVal = v;
+        topIdx = p.index;
+      }
+      if (v > bestRound[p.index]) bestRound[p.index] = v;
+    }
+    firstWins[topIdx] = (firstWins[topIdx] || 0) + 1;
+  }
+
+  const topFirstWinner = state.players.reduce((a, b) =>
+    firstWins[b.index] > firstWins[a.index] ? b : a
+  );
+
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-background-settings backdrop-blur-md px-4 animate-pop-in">
-      <div className="w-full max-w-md flex flex-col items-center gap-4 bg-[#161827] rounded-3xl p-6 border border-white/10">
-        <div className="text-6xl">🏆</div>
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-background-settings backdrop-blur-md px-4 animate-pop-in overflow-auto py-6">
+      <Confetti />
+      <div className="w-full max-w-md flex flex-col items-center gap-4 bg-[#161827] rounded-3xl p-6 border border-white/10 relative z-10">
+        <div className="text-6xl animate-score-bump">🏆</div>
         <div className="text-center">
           <div className="text-sm text-text-secondary font-semibold uppercase tracking-wider">
-            Người thắng
+            Nhà vô địch
           </div>
           <div className="flex items-center justify-center gap-2 mt-1">
             <span
@@ -57,9 +87,15 @@ export const MatchOver = () => {
               >
                 {player.emoji}
               </span>
-              <span className="flex-1 font-bold text-text-primary truncate">
-                {player.name}
-              </span>
+              <div className="flex-1 min-w-0">
+                <div className="font-bold text-text-primary truncate">
+                  {player.name}
+                </div>
+                <div className="text-xs text-text-secondary">
+                  {firstWins[player.index]} ván nhất · cao nhất +
+                  {bestRound[player.index]}
+                </div>
+              </div>
               <span
                 className="text-2xl font-extrabold tabular-nums shrink-0"
                 style={{ color: player.color }}
@@ -70,9 +106,23 @@ export const MatchOver = () => {
           ))}
         </div>
 
+        <div className="w-full flex flex-col gap-1.5 text-sm">
+          <div className="flex items-center justify-between rounded-xl bg-white/5 px-3 py-2">
+            <span className="text-text-secondary">Tổng số ván</span>
+            <span className="font-bold">{state.rounds.length}</span>
+          </div>
+          <div className="flex items-center justify-between rounded-xl bg-white/5 px-3 py-2">
+            <span className="text-text-secondary">Về Nhất nhiều nhất</span>
+            <span className="font-bold">
+              {topFirstWinner.emoji} {topFirstWinner.name} (
+              {firstWins[topFirstWinner.index]})
+            </span>
+          </div>
+        </div>
+
         <button
           onClick={resetMatch}
-          className="mt-2 w-full bg-primary-main active:scale-[0.98] text-white font-bold px-4 py-4 rounded-2xl duration-150 shadow-[0_8px_24px_-6px_rgba(99,102,241,0.7)]"
+          className="mt-1 w-full bg-primary-main active:scale-[0.98] text-white font-bold px-4 py-4 rounded-2xl duration-150 shadow-[0_8px_24px_-6px_rgba(99,102,241,0.7)]"
         >
           🔄 Trận mới
         </button>

@@ -40,6 +40,14 @@ export const CardGameProvider = ({ children }: { children: ReactNode }) => {
       );
     }
 
+    // Tính lại trạng thái kết thúc từ một danh sách ván bất kỳ
+    const computeFinished = (rounds: typeof state.rounds) =>
+      state.players.some(
+        (p) =>
+          rounds.reduce((sum, r) => sum + (r.scores[p.index] ?? 0), 0) >=
+          state.maxScore
+      );
+
     let leaderIndex: number | null = null;
     if (state.rounds.length > 0) {
       let best = -Infinity;
@@ -66,37 +74,30 @@ export const CardGameProvider = ({ children }: { children: ReactNode }) => {
         { id: crypto.randomUUID(), scores },
       ];
 
-      const newTotals: Record<number, number> = {};
-      for (const player of state.players) {
-        newTotals[player.index] = newRounds.reduce(
-          (sum, round) => sum + (round.scores[player.index] ?? 0),
-          0
-        );
-      }
-      const reachedMax = state.players.some(
-        (p) => newTotals[p.index] >= state.maxScore
-      );
-
       setStateAndLocalStorage({
         ...state,
         rounds: newRounds,
-        finished: reachedMax,
+        finished: computeFinished(newRounds),
       });
     };
 
     const editRound = (roundId: string, scores: Record<number, number>) => {
+      const newRounds = state.rounds.map((round) =>
+        round.id === roundId ? { ...round, scores } : round
+      );
       setStateAndLocalStorage({
         ...state,
-        rounds: state.rounds.map((round) =>
-          round.id === roundId ? { ...round, scores } : round
-        ),
+        rounds: newRounds,
+        finished: computeFinished(newRounds),
       });
     };
 
     const deleteRound = (roundId: string) => {
+      const newRounds = state.rounds.filter((round) => round.id !== roundId);
       setStateAndLocalStorage({
         ...state,
-        rounds: state.rounds.filter((round) => round.id !== roundId),
+        rounds: newRounds,
+        finished: computeFinished(newRounds),
       });
     };
 
