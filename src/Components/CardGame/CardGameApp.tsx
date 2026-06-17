@@ -1,28 +1,39 @@
+import { useEffect } from 'react';
 import { useCardGame } from '../../Hooks/useCardGame';
 import { SetupScreen } from './SetupScreen';
 import { Scoreboard } from './Scoreboard';
 import { MatchOver } from './MatchOver';
-import { JoinRoomScreen } from './JoinRoomScreen';
-import { RoomExpired } from './RoomExpired';
 
 export const CardGameApp = () => {
-  const { state, roomStatus, roomId } = useCardGame();
+  const { state, addRound } = useCardGame();
 
-  // Room mode: show join screen if user has no token
-  if (roomId && roomStatus === 'idle') {
-    return <JoinRoomScreen roomId={roomId} />;
-  }
-
-  if (roomStatus === 'expired') {
-    return <RoomExpired />;
-  }
+  // Phát hiện game state từ URL khi tải trang
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const encoded = params.get('game');
+    if (!encoded) return;
+    try {
+      const data = JSON.parse(atob(encoded));
+      if (data.r && Array.isArray(data.r)) {
+        // Import state từ link: thêm các ván từ link vào state hiện tại (từ localStorage)
+        for (const round of data.r) {
+          addRound(round.scores);
+        }
+        // Xóa param khỏi URL để không import lại khi refresh
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    } catch {
+      // ignore invalid encoded data
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!state.started) {
     return <SetupScreen />;
   }
 
   return (
-    <div className="relative min-h-[100dvh] w-full">
+    <div className="relative min-h-[100dvh] w-full pb-28">
       <Scoreboard />
       {state.finished && <MatchOver />}
     </div>

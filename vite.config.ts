@@ -36,10 +36,6 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json,woff,woff2}'],
         runtimeCaching: [
           {
-            urlPattern: /\/api\/.*/i,
-            handler: 'NetworkOnly',
-          },
-          {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'CacheFirst',
             options: {
@@ -71,11 +67,6 @@ export default defineConfig({
       },
     }),
   ],
-  server: {
-    proxy: {
-      '/api': 'http://localhost:3000',
-    },
-  },
   build: {
     minify: 'esbuild',
   },

@@ -33,10 +33,6 @@ export const SetupScreen = () => {
     setGameMode,
     setTotalRounds,
     startMatch,
-    createRoom,
-    copyRoomLink,
-    roomUrl,
-    roomStatus,
   } = useCardGame();
   const [editing, setEditing] = useState<Editing>(null);
 
@@ -170,36 +166,17 @@ export const SetupScreen = () => {
         </Card>
       )}
 
-      {/* Room mode section */}
-      <div className="flex flex-col gap-3 w-full">
-        {roomStatus === 'none' ? (
-          <button
-            onClick={createRoom}
-            className="w-full bg-white/8 active:scale-[0.98] text-text-primary font-bold px-4 py-3.5 rounded-2xl duration-150 flex items-center justify-center gap-2"
-          >
-            🌐 Tạo phòng (nhiều người)
-          </button>
-        ) : roomStatus === 'creating' ? (
-          <div className="w-full text-center py-3 rounded-2xl bg-white/5 text-text-secondary font-semibold">
-            Đang tạo phòng...
-          </div>
-        ) : roomStatus === 'synced' && roomUrl ? (
-          <div className="glass w-full rounded-2xl p-3 flex items-center gap-2">
-            <div className="flex-1 min-w-0 text-sm truncate text-text-secondary">
-              📋 {roomUrl}
-            </div>
-            <button
-              onClick={copyRoomLink}
-              className="shrink-0 bg-primary-main text-white font-bold px-3 py-2 rounded-xl text-xs active:scale-95 duration-150"
-            >
-              Copy link
-            </button>
-          </div>
-        ) : roomStatus === 'error' ? (
-          <div className="w-full text-center py-3 rounded-2xl bg-danger/10 text-danger font-semibold">
-            Lỗi tạo phòng. Thử lại sau.
-          </div>
-        ) : null}
+      {/* Chia sẻ game */}
+      <div className="w-full">
+        <button
+          onClick={() => {
+            navigator.clipboard.writeText(window.location.href).catch(() => {});
+            alert('Đã copy link trang này! Gửi cho bạn bè để họ truy cập.\n\nSau đó trong lúc chơi, bấm "Chia sẻ điểm" ở bảng điểm để gửi cập nhật.');
+          }}
+          className="w-full bg-white/8 active:scale-[0.98] text-text-primary font-bold px-4 py-3.5 rounded-2xl duration-150 flex items-center justify-center gap-2"
+        >
+          🔗 Chia sẻ link bảng điểm
+        </button>
       </div>
 
       <StartButton onClick={startMatch}>Bắt đầu chơi 🎮</StartButton>
