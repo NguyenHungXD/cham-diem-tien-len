@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CardGameContext, CardGameContextType } from '../Contexts/CardGameContext';
 import { CardGameState, cardGameStateSchema, createDefaultCardGameState } from '../Types/CardGame';
 import { useSupabaseRoom } from '../Hooks/useSupabaseRoom';
@@ -39,10 +39,16 @@ export const CardGameProvider = ({ children }: { children: ReactNode }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Tự động sync lên Supabase sau mỗi mutation
+  const pushRef = useRef(pushState);
+  useEffect(() => { pushRef.current = pushState; }, [pushState]);
+
   const withSync = useCallback((fn: (prev: CardGameState) => CardGameState) => {
     setState(prev => {
       const next = fn(prev);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      // Push lên Supabase nếu đang ở room mode
+      setTimeout(() => pushRef.current(), 0);
       return next;
     });
   }, []);
