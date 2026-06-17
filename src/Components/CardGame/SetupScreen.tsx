@@ -178,7 +178,11 @@ export const SetupScreen = () => {
           </button>
         ) : roomStatus === 'creating' ? (
           <div className="w-full text-center py-3 rounded-2xl bg-white/5 text-text-secondary font-semibold">Đang tạo phòng...</div>
-        ) : roomId ? (
+        ) : roomStatus === 'error' ? (
+          <button onClick={createRoom} className="w-full bg-danger/10 text-danger font-bold px-4 py-3.5 rounded-2xl duration-150 active:scale-[0.98]">
+            ❌ Lỗi! Bấm để thử lại
+          </button>
+        ) : roomId && roomStatus === 'synced' ? (
           <div className="glass w-full rounded-2xl p-3 flex items-center gap-2">
             <div className="flex-1 min-w-0 text-sm truncate text-text-secondary">📋 {window.location.origin}/room/{roomId}</div>
             <button onClick={copyRoomLink} className="shrink-0 bg-primary-main text-white font-bold px-3 py-2 rounded-xl text-xs active:scale-95 duration-150">Copy link</button>

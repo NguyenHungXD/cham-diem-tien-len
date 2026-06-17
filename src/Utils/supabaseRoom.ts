@@ -28,7 +28,10 @@ export const createRoom = async (
     m: mode, ms: maxScore, tr: totalRounds, st: false, fi: false,
   };
   const { error } = await supabase.from('rooms').insert({ id: roomId, data });
-  if (error) throw error;
+  if (error) {
+    console.error('createRoom supabase error:', error);
+    throw error;
+  }
   return roomId;
 };
 
