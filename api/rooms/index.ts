@@ -1,4 +1,7 @@
-﻿export const config = {
+import { customAlphabet } from 'nanoid';
+import { kv } from '@vercel/kv';
+
+export const config = {
   runtime: "nodejs",
 };
 
@@ -27,9 +30,6 @@ export default async (req: Request) => {
     if (!playerName || !playerEmoji || !playerColor) {
       return new Response(JSON.stringify({ error: 'Missing fields' }), { status: 400 });
     }
-
-    const { customAlphabet } = await import('nanoid');
-    const { kv } = await import('@vercel/kv');
 
     const nanoid6 = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', 6);
     const roomId = nanoid6();

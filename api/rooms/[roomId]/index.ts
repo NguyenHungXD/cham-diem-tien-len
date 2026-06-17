@@ -1,4 +1,6 @@
-﻿export const config = {
+﻿import { kv } from '@vercel/kv';
+
+export const config = {
   runtime: "nodejs",
 };
 
@@ -12,7 +14,6 @@ export default async (req: Request) => {
     const url = new URL(req.url);
     const parts = url.pathname.split('/');
     const roomId = parts[parts.length - 1];
-    const { kv } = await import('@vercel/kv');
 
     const raw = await kv.get(`room:${roomId}`);
     if (!raw) {

@@ -1,4 +1,6 @@
-﻿export const config = {
+﻿import { kv } from '@vercel/kv';
+
+export const config = {
   runtime: "nodejs",
 };
 
@@ -17,8 +19,6 @@ export default async (req: Request) => {
     if (!playerToken || version === undefined || !state) {
       return new Response(JSON.stringify({ error: 'Missing fields' }), { status: 400 });
     }
-
-    const { kv } = await import('@vercel/kv');
 
     const raw = await kv.get(`room:${roomId}`);
     if (!raw) {
