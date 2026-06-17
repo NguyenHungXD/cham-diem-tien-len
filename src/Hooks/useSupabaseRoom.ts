@@ -22,6 +22,9 @@ export const useSupabaseRoom = (
       const rid = await createRoom(state.players, state.mode, state.maxScore, state.totalRounds);
       setRoomId(rid);
       window.history.pushState({}, '', `/room/${rid}`);
+      // Push player data ngay sau khi tạo phòng
+      await updateRoomState(rid, state);
+      setRemoteVersion(v => v + 1);
       setRoomStatus('synced');
     } catch {
       setRoomStatus('error');
