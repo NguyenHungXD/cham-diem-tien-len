@@ -1,5 +1,6 @@
 import { createContext } from 'react';
 import { CardGameState } from '../Types/CardGame';
+import { RoomStatus } from '../Hooks/useRoomSync';
 
 export type CardGameContextType = {
   state: CardGameState;
@@ -17,6 +18,14 @@ export type CardGameContextType = {
   setTotalRounds: (totalRounds: number) => void;
   finishMatch: () => void;
   resetMatch: () => void;
+  // Room sync
+  roomStatus: RoomStatus;
+  roomId: string | null;
+  roomUrl: string | null;
+  createRoom: () => Promise<void>;
+  joinRoom: (roomId: string, name: string, emoji: string, color: string) => Promise<void>;
+  copyRoomLink: () => void;
+  leaveRoom: () => void;
 };
 
 export const CardGameContext = createContext<CardGameContextType | null>(null);

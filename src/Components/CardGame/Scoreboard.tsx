@@ -117,22 +117,37 @@ const PlayerCard = ({
 };
 
 export const Scoreboard = () => {
-  const { state, totals, leaderIndex, finishMatch } = useCardGame();
+  const { state, totals, leaderIndex, finishMatch, roomId, roomStatus, copyRoomLink } = useCardGame();
   const [roundOpen, setRoundOpen] = useState(false);
 
   const ranked = [...state.players].sort((a, b) => totals[b.index] - totals[a.index]);
+
+  const isRoom = roomStatus === 'synced' && !!roomId;
 
   return (
     <Wrapper>
       <Header>
         <Title>Bảng điểm</Title>
-        {state.mode === 'rounds' ? (
-          <GoalBadge>
-            Ván {state.rounds.length}/{state.totalRounds}
-          </GoalBadge>
-        ) : (
-          <GoalBadge>🎯 Về đích: {state.maxScore}</GoalBadge>
-        )}
+        <div className="flex items-center gap-2">
+          {isRoom ? (
+            <div className="flex items-center gap-1">
+              <button
+                onClick={copyRoomLink}
+                className="flex items-center gap-1 text-xxs font-semibold px-2 py-1 rounded-lg bg-white/8 text-text-secondary active:bg-white/15 duration-150"
+                title="Copy link phòng"
+              >
+                🌐 {roomId}
+              </button>
+            </div>
+          ) : null}
+          {state.mode === 'rounds' ? (
+            <GoalBadge>
+              Ván {state.rounds.length}/{state.totalRounds}
+            </GoalBadge>
+          ) : (
+            <GoalBadge>🎯 Về đích: {state.maxScore}</GoalBadge>
+          )}
+        </div>
       </Header>
 
       <div className="flex flex-col gap-3 w-full">
