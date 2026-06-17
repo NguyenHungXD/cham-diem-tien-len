@@ -30,7 +30,16 @@ export const CardGameProvider = ({ children }: { children: ReactNode }) => {
     setBoth(remote);
   }, [setBoth]);
 
-  const { roomId, roomStatus, create, join, pushState, copyLink, leave } = useSupabaseRoom(state, onRemoteState);
+  // Khi room được tạo xong, tự động start match
+  const handleRoomCreated = useCallback(() => {
+    setState(prev => {
+      const next = { ...prev, started: true, finished: false, rounds: [] };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      return next;
+    });
+  }, []);
+
+  const { roomId, roomStatus, create, join, pushState, copyLink, leave } = useSupabaseRoom(state, onRemoteState, handleRoomCreated);
 
   // Auto-join room từ URL
   const urlRoomId = getRoomFromUrl();
