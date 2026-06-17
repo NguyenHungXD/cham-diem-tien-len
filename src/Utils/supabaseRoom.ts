@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 import { CardGameState } from '../Types/CardGame';
 
-const supabaseUrl = 'https://gcdtglpeaavxwgdbtxaf.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjZHRnbHBlYWF2eHdnZGJ0eGFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2ODU4NTksImV4cCI6MjA5NzI2MTg1OX0.MVzj9Ff1Zt8yBB5aX-XoaYf35zqf1ANBcdeN6KWYQtg';
+const supabaseUrl = 'https://ugokdtnlfownmashseev.supabase.co';
+const supabaseAnonKey = 'sb_publishable_R3lVczj5d-UXKM1E3yRwbQ_Vad0EFnW';
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
