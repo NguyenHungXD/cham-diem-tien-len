@@ -69,10 +69,18 @@ export const subscribeRoom = (
   const channel = supabase
     .channel(`room-${roomId}`)
     .on('postgres_changes',
-      { event: 'UPDATE', schema: 'public', table: 'rooms', filter: `id=eq.${roomId}` },
+      { event: '*', schema: 'public', table: 'rooms', filter: `id=eq.${roomId}` },
       () => onChange(),
     )
     .subscribe();
 
-  return () => { supabase.removeChannel(channel); };
+  // Polling fallback (mỗi 5s) phòng khi realtime không hoạt động
+  const interval = setInterval(() => {
+    onChange();
+  }, 5000);
+
+  return () => {
+    supabase.removeChannel(channel);
+    clearInterval(interval);
+  };
 };
